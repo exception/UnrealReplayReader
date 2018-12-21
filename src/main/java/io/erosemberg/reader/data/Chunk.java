@@ -13,7 +13,7 @@ import lombok.Data;
  * */
 @Data
 @AllArgsConstructor
-class Chunk {
+public class Chunk {
 
     private ChunkType chunkType;
     private int sizeInBytes;

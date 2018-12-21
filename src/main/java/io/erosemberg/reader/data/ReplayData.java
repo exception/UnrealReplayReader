@@ -13,7 +13,7 @@ import lombok.Data;
  * */
 @Data
 @AllArgsConstructor
-class ReplayData {
+public class ReplayData {
 
     private int chunkIndex;
     private long time1;

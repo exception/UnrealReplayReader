@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Data
 @AllArgsConstructor
-class ReplayHeader {
+public class ReplayHeader {
 
     private long magicNumber;
     private long fileVersion;

@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-class Event {
+public class Event {
 
     private int chunkIndex;
     private String id;

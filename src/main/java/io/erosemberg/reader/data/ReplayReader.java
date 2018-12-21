@@ -47,15 +47,14 @@ public class ReplayReader {
         int eventIndex = 0;
         int chunkHeader = INDEX_NONE;
 
-        List<Chunk> chunks = new LinkedList<>();
-        List<Event> checkpoints = new LinkedList<>();
-        List<Event> events = new LinkedList<>();
-        List<ReplayData> dataChunks = new LinkedList<>();
+        LinkedList<Chunk> chunks = new LinkedList<>();
+        LinkedList<Event> checkpoints = new LinkedList<>();
+        LinkedList<Event> events = new LinkedList<>();
+        LinkedList<ReplayData> dataChunks = new LinkedList<>();
 
         while (reader.available() > 0) {
             // TODO: Figure out all of this. -> https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L243
-            long typeOffset = reader.getOffset(); // this is wrong
-            //System.out.println("typeOffset = " + typeOffset);
+            long typeOffset = reader.getOffset(); // Same as FArchive.Tell()
 
             // Parses ELocalFileChunkType from reader.
             long uint = reader.readUInt32(); // unsigned int32 according to https://github.com/EpicGames/UnrealEngine/blob/b70f31f6645d764bcb55829228918a6e3b571e0b/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Public/LocalFileNetworkReplayStreaming.h#L19
@@ -63,8 +62,6 @@ public class ReplayReader {
 
             int sizeInBytes = reader.readInt32();
             long dataOffset = reader.getOffset();
-            System.out.println("sizeInBytes = " + sizeInBytes);
-            System.out.println("dataOffset = " + dataOffset);
 
             Chunk chunk = new Chunk(type, sizeInBytes, typeOffset, dataOffset);
             chunks.add(chunk);
@@ -80,11 +77,11 @@ public class ReplayReader {
                     break;
                 case CHECKPOINT: {
                     int idLength = reader.readInt32();
-                    String id = reader.readUTF8String(0, idLength);
+                    String id = reader.readUTF8String(0, idLength).trim();
                     int groupLength = reader.readInt32();
-                    String group = reader.readUTF8String(0, groupLength);
+                    String group = reader.readUTF8String(0, groupLength).trim();
                     int metadataLength = reader.readInt32();
-                    String metadata = reader.readUTF8String(0, metadataLength);
+                    String metadata = reader.readUTF8String(0, metadataLength).trim();
 
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
@@ -103,22 +100,26 @@ public class ReplayReader {
                     int size = reader.readInt32();
                     long replayDataOffset = reader.getOffset();
 
-                    ReplayData data = new ReplayData(replayDataIndex, time1, time2, sizeInBytes, replayDataOffset);
+                    ReplayData data = new ReplayData(replayDataIndex, time1, time2, size, replayDataOffset);
                     dataChunks.add(data);
                     replayDataIndex += 1;
                     break;
                 }
                 case EVENT: {
                     int idLength = reader.readInt32();
-                    String id = reader.readUTF8String(0, idLength);
+                    String id = reader.readUTF8String(0, idLength).trim();
                     int groupLength = reader.readInt32();
-                    String group = reader.readUTF8String(0, groupLength);
+                    String group = reader.readUTF8String(0, groupLength).trim();
                     int metadataLength = reader.readInt32();
-                    String metadata = reader.readUTF8String(0, metadataLength);
+                    String metadata = reader.readUTF8String(0, metadataLength).trim();
 
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
+
+                    if (group.equalsIgnoreCase("playerElim")) {
+                        // here
+                    }
 
                     long eventDataOffset = reader.getOffset();
 
@@ -128,17 +129,18 @@ public class ReplayReader {
                     break;
                 }
                 case UNKNOWN:
-                    System.out.println("oops unknown");
+                    System.out.println("Encountered unknown type.");
                     break;
             }
 
             // https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L401
-            // seek?
-            // TODO: figure this out ^
-            reader.skip(dataOffset + sizeInBytes);
+            reader.setOffset(dataOffset + sizeInBytes); // Same as FArchive.Seek()
         }
 
-        System.out.println("dataChunks = " + dataChunks);
+        builder.chunks(chunks);
+        builder.checkpoints(checkpoints);
+        builder.dataChunks(dataChunks);
+        builder.events(events);
 
         return builder.build();
     }
