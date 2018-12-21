@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        // This is just for testing purposes.
         Path path = Paths.get("C:\\Users\\Usuario\\AppData\\Local\\FortniteGame\\Saved\\Demos\\UnsavedReplay-2018.12.18-23.41.38.replay");
         FileInputStream stream = new FileInputStream(path.toFile());
         ByteStreamReader reader = new ByteStreamReaderBuilder()

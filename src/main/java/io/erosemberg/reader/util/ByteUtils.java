@@ -21,4 +21,7 @@ public class ByteUtils {
         return result;
     }
 
+    public static int adjustLength(int length) {
+        return length < 0 ? -length * 2 : length;
+    }
 }

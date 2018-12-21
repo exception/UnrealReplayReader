@@ -21,9 +21,9 @@ public enum ChunkType {
     EVENT(3),
     UNKNOWN(0xFFFFFFFF);
 
-    int identifier;
+    long identifier;
 
-    public static ChunkType from(int identifier) {
+    public static ChunkType from(long identifier) {
         return Stream.of(values()).filter(type -> type.identifier == identifier).findAny().orElse(UNKNOWN);
     }
 }
