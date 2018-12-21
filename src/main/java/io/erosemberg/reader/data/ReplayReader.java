@@ -62,7 +62,7 @@ public class ReplayReader {
             ChunkType type = ChunkType.from(uint);
 
             int sizeInBytes = reader.readInt32();
-            long dataOffset = reader.getOffset(); // this is wrong
+            long dataOffset = reader.getOffset();
             System.out.println("sizeInBytes = " + sizeInBytes);
             System.out.println("dataOffset = " + dataOffset);
 
@@ -90,7 +90,7 @@ public class ReplayReader {
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
 
-                    long eventDataOffset = reader.getOffset(); // this is wrong
+                    long eventDataOffset = reader.getOffset();
 
                     Event checkpoint = new Event(checkpointIndex, id, group, metadata, time1, time2, size, eventDataOffset);
                     checkpoints.add(checkpoint);
@@ -101,7 +101,7 @@ public class ReplayReader {
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
-                    long replayDataOffset = reader.getOffset(); // this is wrong
+                    long replayDataOffset = reader.getOffset();
 
                     ReplayData data = new ReplayData(replayDataIndex, time1, time2, sizeInBytes, replayDataOffset);
                     dataChunks.add(data);
@@ -120,7 +120,7 @@ public class ReplayReader {
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
 
-                    long eventDataOffset = reader.getOffset(); // this is wrong
+                    long eventDataOffset = reader.getOffset();
 
                     Event event = new Event(eventIndex, id, group, metadata, time1, time2, size, eventDataOffset);
                     events.add(event);
