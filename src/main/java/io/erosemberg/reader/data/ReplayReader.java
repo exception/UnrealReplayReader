@@ -54,7 +54,7 @@ public class ReplayReader {
 
         while (reader.available() > 0) {
             // TODO: Figure out all of this. -> https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L243
-            long typeOffset = reader.available(); // this is wrong
+            long typeOffset = reader.getOffset(); // this is wrong
             //System.out.println("typeOffset = " + typeOffset);
 
             // Parses ELocalFileChunkType from reader.
@@ -62,7 +62,9 @@ public class ReplayReader {
             ChunkType type = ChunkType.from(uint);
 
             int sizeInBytes = reader.readInt32();
-            long dataOffset = reader.available(); // this is wrong
+            long dataOffset = reader.getOffset(); // this is wrong
+            System.out.println("sizeInBytes = " + sizeInBytes);
+            System.out.println("dataOffset = " + dataOffset);
 
             Chunk chunk = new Chunk(type, sizeInBytes, typeOffset, dataOffset);
             chunks.add(chunk);
@@ -88,7 +90,7 @@ public class ReplayReader {
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
 
-                    long eventDataOffset = reader.available(); // this is wrong
+                    long eventDataOffset = reader.getOffset(); // this is wrong
 
                     Event checkpoint = new Event(checkpointIndex, id, group, metadata, time1, time2, size, eventDataOffset);
                     checkpoints.add(checkpoint);
@@ -99,7 +101,7 @@ public class ReplayReader {
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
-                    long replayDataOffset = reader.available(); // this is wrong
+                    long replayDataOffset = reader.getOffset(); // this is wrong
 
                     ReplayData data = new ReplayData(replayDataIndex, time1, time2, sizeInBytes, replayDataOffset);
                     dataChunks.add(data);
@@ -118,7 +120,7 @@ public class ReplayReader {
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
 
-                    long eventDataOffset = reader.available(); // this is wrong
+                    long eventDataOffset = reader.getOffset(); // this is wrong
 
                     Event event = new Event(eventIndex, id, group, metadata, time1, time2, size, eventDataOffset);
                     events.add(event);
