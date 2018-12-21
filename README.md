@@ -1,4 +1,4 @@
-#🐎 Unreal Replay Reader
+# 🐎 Unreal Replay Reader
 This library/utility is able to parse and output data from Unreal Engine replays.
 
 ## Getting Started
