@@ -7,15 +7,12 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * @author Erik Rosemberg
  * @since 21/12/2018
  */
 public class ReplayReader {
-
-    private final Pattern PATTERN = Pattern.compile("/0000$/");
 
     private final int INDEX_NONE = -1;
 

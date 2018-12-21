@@ -34,7 +34,7 @@ public class Main {
                 .stream(stream)
                 .order(ByteOrder.LITTLE_ENDIAN)
                 .build();
-        
+
         ReplayReader replayReader = new ReplayReader(reader);
         ReplayInfo info = replayReader.read();
         stopwatch.start();

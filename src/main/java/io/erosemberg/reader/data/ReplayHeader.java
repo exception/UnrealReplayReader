@@ -1,7 +1,6 @@
 package io.erosemberg.reader.data;
 
 import com.google.common.base.Charsets;
-import io.erosemberg.reader.util.ByteUtils;
 import io.erosemberg.reader.util.TimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +12,11 @@ import java.util.Date;
 /**
  * Represents the header of a replay (or demo) from the Unreal Engine.
  * There is no structure for it therefore it is placed inside this single class.
- *
+ * <p>
  * The defined variables can be seen here:
- * @see <a href="https://github.com/EpicGames/UnrealEngine/blob/b70f31f6645d764bcb55829228918a6e3b571e0b/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Public/LocalFileNetworkReplayStreaming.h#L90-L100">Structure.</a>
  *
  * @author Erik Rosemberg
+ * @see <a href="https://github.com/EpicGames/UnrealEngine/blob/b70f31f6645d764bcb55829228918a6e3b571e0b/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Public/LocalFileNetworkReplayStreaming.h#L90-L100">Structure.</a>
  * @since 21/12/2018
  */
 @Data

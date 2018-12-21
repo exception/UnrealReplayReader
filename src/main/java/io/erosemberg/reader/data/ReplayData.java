@@ -6,11 +6,10 @@ import lombok.Data;
 /**
  * Represents the FLocalFileReplayDataInfo from Unreal Engine.
  *
- * @see <a href="https://github.com/EpicGames/UnrealEngine/blob/b70f31f6645d764bcb55829228918a6e3b571e0b/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Public/LocalFileNetworkReplayStreaming.h#L45">FLocalFileReplayDataInfo</a>
- *
  * @author Erik Rosemberg
+ * @see <a href="https://github.com/EpicGames/UnrealEngine/blob/b70f31f6645d764bcb55829228918a6e3b571e0b/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Public/LocalFileNetworkReplayStreaming.h#L45">FLocalFileReplayDataInfo</a>
  * @since 21/12/2018
- * */
+ */
 @Data
 @AllArgsConstructor
 public class ReplayData {
