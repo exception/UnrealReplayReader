@@ -1,6 +1,5 @@
 package io.erosemberg.reader.data;
 
-import com.google.common.primitives.UnsignedInteger;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -17,10 +16,10 @@ import lombok.Data;
 class ReplayData {
 
     private int chunkIndex;
-    private UnsignedInteger time1;
-    private UnsignedInteger time2;
+    private long time1;
+    private long time2;
     private int sizeInBytes;
     private long replayDataOffset;
-    private long streamOffset;
+    //private long streamOffset;
 
 }

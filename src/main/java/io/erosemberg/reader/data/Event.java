@@ -1,6 +1,5 @@
 package io.erosemberg.reader.data;
 
-import com.google.common.primitives.UnsignedInteger;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -20,8 +19,8 @@ class Event {
     private String id;
     private String group;
     private String metadata;
-    private UnsignedInteger time1;
-    private UnsignedInteger time2;
+    private long time1;
+    private long time2;
 
     private int sizeInBytes;
     private long eventDataOffset;

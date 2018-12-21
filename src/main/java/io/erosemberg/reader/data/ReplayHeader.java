@@ -24,22 +24,22 @@ import java.util.Date;
 @AllArgsConstructor
 class ReplayHeader {
 
-    private int magicNumber;
-    private int fileVersion;
+    private long magicNumber;
+    private long fileVersion;
     private int lengthInMs;
-    private int networkVersion;
-    private int changeList;
+    private long networkVersion;
+    private long changeList;
     private String friendlyName;
     private boolean isLive;
     private Date timeStamp;
     private boolean compressed;
 
     static ReplayHeader readHeader(ByteStreamReader reader) throws IOException {
-        int magicNumber = reader.readInt32();
-        int fileVersion = reader.readInt32();
+        long magicNumber = reader.readUInt32();
+        long fileVersion = reader.readUInt32();
         int lengthInMs = reader.readInt32();
-        int networkVersion = reader.readInt32();
-        int changeList = reader.readInt32();
+        long networkVersion = reader.readUInt32();
+        long changeList = reader.readUInt32();
         int friendlyNameSize = adjustFriendlySizeName(reader.readInt32());
 
         System.out.println("friendlyNameSize = " + friendlyNameSize);
@@ -47,13 +47,13 @@ class ReplayHeader {
         byte[] buffer = new byte[friendlyNameSize];
         reader.read(buffer, 0, friendlyNameSize);
         String name = new String(buffer, Charsets.UTF_8).trim();
-        boolean isLive = reader.readInt32() != 0;
+        boolean isLive = reader.readUInt32() != 0;
 
         // read timestamp as uint64 as per Unreal Engine specifications.
         // see https://api.unrealengine.com/INT/API/Runtime/Core/Misc/FDateTime/__ctor/2/index.html
         Date timestamp = TimeUtils.fromTicks(reader.readUInt64());
 
-        boolean compressed = reader.readInt32() != 0;
+        boolean compressed = reader.readUInt32() != 0;
 
         return new ReplayHeader(
                 magicNumber,

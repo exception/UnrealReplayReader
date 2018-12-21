@@ -52,13 +52,17 @@ public class ReplayReader {
         List<Event> events = new LinkedList<>();
         List<ReplayData> dataChunks = new LinkedList<>();
 
-        while (reader.available() != 0) {
-            long typeOffset = reader.readInt64();
+        while (reader.available() > 0) {
+            // TODO: Figure out all of this. -> https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L243
+            long typeOffset = reader.available(); // this is wrong
+            //System.out.println("typeOffset = " + typeOffset);
 
-            ChunkType type = ChunkType.from(reader.readUInt32());
-            System.out.println("type = " + type);
+            // Parses ELocalFileChunkType from reader.
+            long uint = reader.readUInt32(); // unsigned int32 according to https://github.com/EpicGames/UnrealEngine/blob/b70f31f6645d764bcb55829228918a6e3b571e0b/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Public/LocalFileNetworkReplayStreaming.h#L19
+            ChunkType type = ChunkType.from(uint);
+
             int sizeInBytes = reader.readInt32();
-            long dataOffset = reader.readInt64();
+            long dataOffset = reader.available(); // this is wrong
 
             Chunk chunk = new Chunk(type, sizeInBytes, typeOffset, dataOffset);
             chunks.add(chunk);
@@ -69,23 +73,25 @@ public class ReplayReader {
                     if (chunkHeader == INDEX_NONE) {
                         chunkHeader = chunkIndex;
                     } else {
-                        throw new IllegalStateException("Found multiple header chunks");
+                        throw new IllegalStateException("more than one header chunk found!");
                     }
                     break;
                 case CHECKPOINT: {
                     int idLength = reader.readInt32();
-                    String id = reader.readUTF8String(0, adjustLength(idLength));
+                    String id = reader.readUTF8String(0, idLength);
                     int groupLength = reader.readInt32();
-                    String group = reader.readUTF8String(0, adjustLength(groupLength));
+                    String group = reader.readUTF8String(0, groupLength);
                     int metadataLength = reader.readInt32();
-                    String metadata = reader.readUTF8String(0, adjustLength(metadataLength));
+                    String metadata = reader.readUTF8String(0, metadataLength);
+
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
-                    long eventDataOffset = reader.readInt64();
 
-                    Event event = new Event(checkpointIndex, id, group, metadata, UnsignedInteger.valueOf(time1), UnsignedInteger.valueOf(time2), size, eventDataOffset);
-                    checkpoints.add(event);
+                    long eventDataOffset = reader.available(); // this is wrong
+
+                    Event checkpoint = new Event(checkpointIndex, id, group, metadata, time1, time2, size, eventDataOffset);
+                    checkpoints.add(checkpoint);
                     checkpointIndex += 1;
                     break;
                 }
@@ -93,36 +99,44 @@ public class ReplayReader {
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
-                    long replayDataOffset = reader.readInt64();
-                    long streamOffset = reader.readInt64();
+                    long replayDataOffset = reader.available(); // this is wrong
 
-                    ReplayData data = new ReplayData(replayDataIndex, UnsignedInteger.valueOf(time1), UnsignedInteger.valueOf(time2), size, replayDataOffset, streamOffset);
+                    ReplayData data = new ReplayData(replayDataIndex, time1, time2, sizeInBytes, replayDataOffset);
                     dataChunks.add(data);
                     replayDataIndex += 1;
                     break;
                 }
                 case EVENT: {
                     int idLength = reader.readInt32();
-                    String id = reader.readUTF8String(0, adjustLength(idLength));
+                    String id = reader.readUTF8String(0, idLength);
                     int groupLength = reader.readInt32();
-                    String group = reader.readUTF8String(0, adjustLength(groupLength));
+                    String group = reader.readUTF8String(0, groupLength);
                     int metadataLength = reader.readInt32();
-                    String metadata = reader.readUTF8String(0, adjustLength(groupLength));
+                    String metadata = reader.readUTF8String(0, metadataLength);
+
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
-                    long eventDataOffset = reader.readInt64();
 
-                    Event event = new Event(eventIndex, id, group, metadata, UnsignedInteger.valueOf(time1), UnsignedInteger.valueOf(time2), size, eventDataOffset);
+                    long eventDataOffset = reader.available(); // this is wrong
+
+                    Event event = new Event(eventIndex, id, group, metadata, time1, time2, size, eventDataOffset);
                     events.add(event);
                     eventIndex += 1;
                     break;
                 }
                 case UNKNOWN:
-                    //System.out.println("Skipping unknown (cleared) chunk.");
+                    System.out.println("oops unknown");
                     break;
             }
+
+            // https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L401
+            // seek?
+            // TODO: figure this out ^
+            reader.skip(dataOffset + sizeInBytes);
         }
+
+        System.out.println("dataChunks = " + dataChunks);
 
         return builder.build();
     }
