@@ -5,6 +5,8 @@ import lombok.experimental.UtilityClass;
 import java.util.Date;
 
 /**
+ * Utility class for any methods to help us interact with time.
+ *
  * @author Erik Rosemberg
  * @since 21/12/2018
  */
