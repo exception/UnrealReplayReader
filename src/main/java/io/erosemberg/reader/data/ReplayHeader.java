@@ -42,11 +42,9 @@ public class ReplayHeader {
         long changeList = reader.readUInt32();
         int friendlyNameSize = adjustFriendlySizeName(reader.readInt32());
 
-        System.out.println("friendlyNameSize = " + friendlyNameSize);
-
         byte[] buffer = new byte[friendlyNameSize];
         reader.read(buffer, 0, friendlyNameSize);
-        String name = new String(buffer, Charsets.UTF_8).trim();
+        String name = new String(buffer, Charsets.UTF_8).trim().replaceAll("\u0000", "");
         boolean isLive = reader.readUInt32() != 0;
 
         // read timestamp as uint64 as per Unreal Engine specifications.
