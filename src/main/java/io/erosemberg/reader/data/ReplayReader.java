@@ -1,6 +1,7 @@
 package io.erosemberg.reader.data;
 
-import io.erosemberg.reader.util.ByteUtils;
+import io.erosemberg.reader.gamedata.GameData;
+import io.erosemberg.reader.parsing.events.EventParser;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 
 import java.io.IOException;
@@ -12,9 +13,10 @@ import java.util.Set;
  * @author Erik Rosemberg
  * @since 21/12/2018
  */
-public class ReplayReader {
+public class ReplayReader<T extends GameData> {
 
     private final int INDEX_NONE = -1;
+    private final EventParser<T> parser;
 
     private ByteStreamReader reader;
 
@@ -23,12 +25,13 @@ public class ReplayReader {
      *
      * @param reader the ByteStreamReader from which we will be reading the data.
      */
-    public ReplayReader(ByteStreamReader reader) {
+    public ReplayReader(ByteStreamReader reader, EventParser parser) {
         this.reader = reader;
+        this.parser = parser;
     }
 
     @SuppressWarnings("all")
-    public ReplayInfo read() throws IOException {
+    public ReplayInfo<T> read() throws IOException {
         ReplayInfo.ReplayInfoBuilder builder = ReplayInfo.builder();
 
         ReplayHeader header = ReplayHeader.readHeader(this.reader);
@@ -47,7 +50,6 @@ public class ReplayReader {
         LinkedList<Event> events = new LinkedList<>();
         LinkedList<ReplayData> dataChunks = new LinkedList<>();
 
-        LinkedList<ReplayInfo.Kill> kills = new LinkedList<>();
         Set<String> players = new HashSet<>();
 
         System.out.println("Beginning to read all the chunks! (" + reader.available() + ").");
@@ -116,21 +118,13 @@ public class ReplayReader {
                     long time2 = reader.readUInt32();
                     int size = reader.readInt32();
 
-                    if (group.equalsIgnoreCase("playerElim")) {
-                        reader.skip(45); // woo magic numbers!
-                        int killedLength = ByteUtils.adjustLength(reader.readInt32());
-                        String killed = reader.readUTF8String(0, killedLength).trim().replace("\u0000", "");
-                        int killerLength = ByteUtils.adjustLength(reader.readInt32());
-                        String killer = reader.readUTF8String(0, killerLength).trim().replace("\u0000", "");
-
-                        kills.add(new ReplayInfo.Kill(killer, killed));
-                        players.add(killed);
-                        players.add(killer);
-                    }
-
                     long eventDataOffset = reader.getOffset();
 
                     Event event = new Event(eventIndex, id, group, metadata, time1, time2, size, eventDataOffset);
+                    if (parser != null) {
+                        parser.parse(event, reader);
+                    }
+
                     events.add(event);
                     eventIndex += 1;
                     break;
@@ -149,8 +143,7 @@ public class ReplayReader {
                 .checkpoints(checkpoints)
                 .dataChunks(dataChunks)
                 .events(events)
-                .kills(kills)
-                .players(players);
+                .gameData(parser.finalFetch());
 
         return builder.build();
     }
