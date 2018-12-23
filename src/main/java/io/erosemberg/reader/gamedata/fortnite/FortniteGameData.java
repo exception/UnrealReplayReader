@@ -31,5 +31,6 @@ public class FortniteGameData implements GameData {
     public static class Kill {
         String killer;
         String killed;
+        FortniteWeaponTypes type;
     }
 }

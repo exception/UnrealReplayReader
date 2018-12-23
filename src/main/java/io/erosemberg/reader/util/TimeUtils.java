@@ -20,4 +20,12 @@ public class TimeUtils {
         return new Date((ticks - TICKS_AT_EPOCH) / TICKS_PER_MILLISECOND);
     }
 
+    public static String msToTimestamp(long ms) {
+        long minutes = Math.round(Math.floor(ms / 1000 / 60));
+        ms -= minutes * 1000 * 60;
+        long seconds = Math.round(Math.floor(ms / 1000));
+        ms -= seconds * 1000;
+        return (minutes < 10 ? "0" + minutes : String.valueOf(minutes)) + ":" + (seconds < 10 ? "0" + seconds : String.valueOf(seconds));
+    }
+
 }

@@ -16,7 +16,7 @@ public interface EventParser<T extends GameData> {
      * Returns an instance of {@link T} with data gathered from the {@link Event}
      * and the {@link ByteStreamReader}.
      *
-     * @param event the even to parse, must be non-null.
+     * @param event  the even to parse, must be non-null.
      * @param reader the stream of the replay we're reading
      *               must be non-null. Since it is not a clone, any changes
      *               will affect the actual reader being used by the {@link io.erosemberg.reader.data.ReplayReader}

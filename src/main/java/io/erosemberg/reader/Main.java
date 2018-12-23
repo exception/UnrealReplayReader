@@ -5,7 +5,6 @@ import io.erosemberg.reader.data.ReplayInfo;
 import io.erosemberg.reader.data.ReplayReader;
 import io.erosemberg.reader.gamedata.fortnite.FortniteGameData;
 import io.erosemberg.reader.parsing.StandardParsers;
-import io.erosemberg.reader.parsing.events.FortniteEventParser;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 import me.hugmanrique.jacobin.reader.ByteStreamReaderBuilder;
 

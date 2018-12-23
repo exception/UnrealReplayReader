@@ -1,13 +1,13 @@
 package io.erosemberg.reader.parsing.events;
 
-import com.google.common.base.Charsets;
 import io.erosemberg.reader.data.Event;
 import io.erosemberg.reader.gamedata.fortnite.FortniteGameData;
+import io.erosemberg.reader.gamedata.fortnite.FortniteWeaponTypes;
 import io.erosemberg.reader.util.ByteUtils;
+import io.erosemberg.reader.util.TimeUtils;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * @author Erik Rosemberg
@@ -27,13 +27,17 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
             String killed = reader.readUTF8String(0, killedLength).trim().replace("\u0000", "");
             int killerLength = ByteUtils.adjustLength(reader.readInt32());
             String killer = reader.readUTF8String(0, killerLength).trim().replace("\u0000", "");
+            long weaponId = reader.readUInt32();
+            //System.out.println("size = " + weaponId);
 
-            gameData.getKills().add(new FortniteGameData.Kill(killer, killed));
+            FortniteWeaponTypes type = FortniteWeaponTypes.fromId(weaponId);
+            if (type == FortniteWeaponTypes.UNKNOWN) {
+                System.out.println("Unknown weapon type with ID " + weaponId + " at " + TimeUtils.msToTimestamp(event.getTime1()));
+            }
+
+            gameData.getKills().add(new FortniteGameData.Kill(killer, killed, type));
             gameData.getPlayers().add(killer);
             gameData.getPlayers().add(killed);
-
-            long size = reader.readUInt32();
-            System.out.println("size = " + size);
         } else if (metatag.equalsIgnoreCase("AthenaMatchTeamStats")) {
             reader.readUInt32(); // ignore this value, always 0.
             long finalRanking = reader.readUInt32();
