@@ -3,6 +3,7 @@ package io.erosemberg.reader;
 import io.erosemberg.reader.data.ReplayInfo;
 import io.erosemberg.reader.data.ReplayReader;
 import io.erosemberg.reader.gamedata.fortnite.FortniteGameData;
+import io.erosemberg.reader.parsing.ParserOptions;
 import io.erosemberg.reader.parsing.StandardParsers;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 import me.hugmanrique.jacobin.reader.ByteStreamReaderBuilder;
@@ -33,7 +34,7 @@ public class Main {
                 .order(ByteOrder.LITTLE_ENDIAN)
                 .build();
 
-        ReplayReader<FortniteGameData> replayReader = new ReplayReader<>(reader, StandardParsers.FORTNITE_PARSER);
+        ReplayReader<FortniteGameData> replayReader = new ReplayReader<>(reader, StandardParsers.FORTNITE_PARSER, ParserOptions.builder().printUnknownWeapons(true).build());
         ReplayInfo<FortniteGameData> info = replayReader.read();
         FortniteGameData gameData = info.getGameData();
         System.out.println("Finished Reading Replay!");

@@ -2,6 +2,7 @@ package io.erosemberg.reader.parsing.events;
 
 import io.erosemberg.reader.data.Event;
 import io.erosemberg.reader.gamedata.GameData;
+import io.erosemberg.reader.parsing.ParserOptions;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public interface EventParser<T extends GameData> {
      *               and may affect it's performance.
      * @throws IOException if an I/O error occurs.
      */
-    T parse(Event event, ByteStreamReader reader) throws IOException;
+    T parse(Event event, ByteStreamReader reader, ParserOptions options) throws IOException;
 
     /**
      * Once we're done parsing, this will return the finalized GameData object.
