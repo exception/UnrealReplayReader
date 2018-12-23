@@ -41,7 +41,7 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
                 System.out.println("Unknown weapon type with ID " + weaponId + " at " + TimeUtils.msToTimestamp(event.getTime1()));
             }
 
-            gameData.getKills().add(new FortniteGameData.Kill(killer, killed, type, event.getTime1(), event.getTime2()));
+            gameData.getKills().add(new FortniteGameData.Kill(killer, killed, type, FortniteWeaponTypes.isKnock(weaponId), event.getTime1(), event.getTime2()));
             gameData.getPlayers().add(killer);
             gameData.getPlayers().add(killed);
         } else if (metatag.equalsIgnoreCase("AthenaMatchTeamStats")) {

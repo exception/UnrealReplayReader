@@ -45,6 +45,8 @@ public class FortniteGameData implements GameData {
         String killed;
         FortniteWeaponTypes type;
 
+        boolean isElimination;
+
         long time1;
         long time2;
 
