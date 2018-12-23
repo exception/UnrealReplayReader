@@ -1,6 +1,7 @@
 package io.erosemberg.reader.gamedata.fortnite;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.stream.Stream;
 
@@ -33,12 +34,27 @@ public enum FortniteWeaponTypes {
 
     private long id;
     private long knockId;
+    @Getter
     private String humanName;
 
+    /**
+     * Checks if a weapon type matches the knock weapon types.
+     * Apparently the weapons have different ids for the DBNO (down but not out) state.
+     *
+     * If <code>true</code> is returned, the player was fully eliminated from the game.
+     * If <code>false</code> is returned, the player was knocked out from the game.
+     *
+     * @param id the id of the weapon used
+     */
     public static boolean isKnock(long id) {
         return Stream.of(values()).anyMatch(type -> type.id == id);
     }
 
+    /**
+     * Returns the weapon type if any match the id, if not, returns <code>UNKNOWN</code>
+     *
+     * @param id the id of the weapon.
+     */
     public static FortniteWeaponTypes fromId(long id) {
         return Stream.of(values()).filter(type -> type.id == id || type.knockId == id).findAny().orElse(UNKNOWN);
     }
