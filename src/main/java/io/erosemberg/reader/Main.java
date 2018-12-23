@@ -1,6 +1,5 @@
 package io.erosemberg.reader;
 
-import com.google.common.base.Stopwatch;
 import io.erosemberg.reader.data.ReplayInfo;
 import io.erosemberg.reader.data.ReplayReader;
 import io.erosemberg.reader.gamedata.fortnite.FortniteGameData;
@@ -27,7 +26,6 @@ public class Main {
         String replayPath = scanner.next();
 
         // This is just for testing purposes.
-        Stopwatch stopwatch = Stopwatch.createUnstarted();
         Path path = Paths.get(replayPath);
         FileInputStream stream = new FileInputStream(path.toFile());
         ByteStreamReader reader = new ByteStreamReaderBuilder()
@@ -38,7 +36,6 @@ public class Main {
         ReplayReader<FortniteGameData> replayReader = new ReplayReader<>(reader, StandardParsers.FORTNITE_PARSER);
         ReplayInfo<FortniteGameData> info = replayReader.read();
         FortniteGameData gameData = info.getGameData();
-        stopwatch.start();
         System.out.println("Finished Reading Replay!");
         System.out.println("*** HEADER DATA:");
         System.out.println("    Name: " + info.getHeader().getFriendlyName());
@@ -54,8 +51,6 @@ public class Main {
         System.out.println("    Found " + gameData.getKills().size() + " kills.");
         System.out.println("    Found " + gameData.getPlayers().size() + " players.");
         System.out.println(gameData.toString());
-        stopwatch.stop();
-        System.out.println("Done (Took " + stopwatch.toString() + ")");
     }
 
 }

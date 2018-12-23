@@ -1,12 +1,12 @@
 package io.erosemberg.reader.data;
 
-import com.google.common.base.Charsets;
 import io.erosemberg.reader.util.TimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -43,7 +43,7 @@ public class ReplayHeader {
 
         byte[] buffer = new byte[friendlyNameSize];
         reader.read(buffer, 0, friendlyNameSize);
-        String name = new String(buffer, Charsets.UTF_8).trim().replaceAll("\u0000", "");
+        String name = new String(buffer, StandardCharsets.UTF_8).trim().replaceAll("\u0000", "");
         boolean isLive = reader.readUInt32() != 0;
 
         // read timestamp as uint64 as per Unreal Engine specifications.

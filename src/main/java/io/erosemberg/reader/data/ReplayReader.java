@@ -78,11 +78,11 @@ public class ReplayReader<T extends GameData> {
                     break;
                 case CHECKPOINT: {
                     int idLength = reader.readInt32();
-                    String id = reader.readUTF8String(0, idLength).trim();
+                    String id = reader.readUTF(idLength).trim();
                     int groupLength = reader.readInt32();
-                    String group = reader.readUTF8String(0, groupLength).trim();
+                    String group = reader.readUTF(groupLength).trim();
                     int metadataLength = reader.readInt32();
-                    String metadata = reader.readUTF8String(0, metadataLength).trim();
+                    String metadata = reader.readUTF(metadataLength).trim();
 
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();
@@ -108,11 +108,11 @@ public class ReplayReader<T extends GameData> {
                 }
                 case EVENT: {
                     int idLength = reader.readInt32();
-                    String id = reader.readUTF8String(0, idLength).trim();
+                    String id = reader.readUTF(idLength).trim();
                     int groupLength = reader.readInt32();
-                    String group = reader.readUTF8String(0, groupLength).trim();
+                    String group = reader.readUTF(groupLength).trim();
                     int metadataLength = reader.readInt32();
-                    String metadata = reader.readUTF8String(0, metadataLength).trim();
+                    String metadata = reader.readUTF(metadataLength).trim();
 
                     long time1 = reader.readUInt32();
                     long time2 = reader.readUInt32();

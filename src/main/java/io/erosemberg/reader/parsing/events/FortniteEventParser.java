@@ -24,9 +24,9 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
         if (group.equalsIgnoreCase("playerElim")) {
             reader.skip(45); // woo magic numbers!
             int killedLength = ByteUtils.adjustLength(reader.readInt32());
-            String killed = reader.readUTF8String(0, killedLength).trim().replace("\u0000", "");
+            String killed = reader.readUTF(killedLength).trim().replace("\u0000", "");
             int killerLength = ByteUtils.adjustLength(reader.readInt32());
-            String killer = reader.readUTF8String(0, killerLength).trim().replace("\u0000", "");
+            String killer = reader.readUTF(killerLength).trim().replace("\u0000", "");
             long weaponId = reader.readUInt32();
             //System.out.println("size = " + weaponId);
 
