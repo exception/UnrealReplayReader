@@ -9,6 +9,8 @@ import io.erosemberg.reader.util.TimeUtils;
 import me.hugmanrique.jacobin.reader.ByteStreamReader;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Erik Rosemberg
@@ -25,11 +27,14 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
         if (group.equalsIgnoreCase("playerElim")) {
             reader.skip(45); // woo magic numbers!
             int killedLength = ByteUtils.adjustLength(reader.readInt32());
-            String killed = reader.readUTF(killedLength).trim().replace("\u0000", "");
+            byte[] killedBuffer = new byte[killedLength];
+            reader.read(killedBuffer, 0, killedLength);
+            String killed = properParse(killedBuffer, killedLength);
             int killerLength = ByteUtils.adjustLength(reader.readInt32());
-            String killer = reader.readUTF(killerLength).trim().replace("\u0000", "");
+            byte[] killerBuffer = new byte[killerLength];
+            reader.read(killerBuffer, 0, killerLength);
+            String killer = properParse(killerBuffer, killerLength);
             long weaponId = reader.readUInt32();
-            //System.out.println("size = " + weaponId);
 
             FortniteWeaponTypes type = FortniteWeaponTypes.fromId(weaponId);
             if (type == FortniteWeaponTypes.UNKNOWN && options.isPrintUnknownWeapons()) {
@@ -55,6 +60,25 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
             gameData.setTotalElims(totalElims);
         }
         return gameData;
+    }
+
+    /**
+     * Due to Epic's way of handling weird characters, they are using two different encodings.
+     * This method is checking if the second to last byte is 0, since the UTF-16 null terminator (\0)
+     * is <code>0x0 0x0</code> vs UTF-8's <code>0x0</code>, hence the comparison of the 2nd to last byte
+     * instead of the last byte.
+     *
+     * @param data the binary data gathered from the stream.
+     * @param len the length of the binary length.
+     */
+    private String properParse(byte[] data, int len) {
+        boolean isUtf16 = data[len - 2] == 0; // check if 2nd to last byte is 0x0.
+        Charset charset = StandardCharsets.UTF_8;
+        if (isUtf16) {
+            charset = StandardCharsets.UTF_16LE;
+        }
+
+        return new String(data, charset);
     }
 
     @Override
