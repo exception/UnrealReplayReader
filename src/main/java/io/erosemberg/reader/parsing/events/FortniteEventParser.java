@@ -37,11 +37,13 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
             long weaponId = reader.readUInt32();
 
             FortniteWeaponTypes type = FortniteWeaponTypes.fromId(weaponId);
+            boolean knock = FortniteWeaponTypes.isKnock(weaponId);
             if (type == FortniteWeaponTypes.UNKNOWN && options.isPrintUnknownWeapons()) {
                 System.out.println("Unknown weapon type with ID " + weaponId + " at " + TimeUtils.msToTimestamp(event.getTime1()));
+                knock = false;
             }
 
-            gameData.getKills().add(new FortniteGameData.Kill(killer, killed, type, FortniteWeaponTypes.isKnock(weaponId), event.getTime1(), event.getTime2()));
+            gameData.getKills().add(new FortniteGameData.Kill(killer, killed, type, knock, event.getTime1(), event.getTime2()));
             gameData.getPlayers().add(killer);
             gameData.getPlayers().add(killed);
         } else if (metatag.equalsIgnoreCase("AthenaMatchTeamStats")) {
