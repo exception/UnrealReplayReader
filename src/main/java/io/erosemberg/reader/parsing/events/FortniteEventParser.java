@@ -71,7 +71,7 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
      * instead of the last byte.
      *
      * @param data the binary data gathered from the stream.
-     * @param len the length of the binary length.
+     * @param len  the length of the binary length.
      */
     private String properParse(byte[] data, int len) {
         boolean isUtf16 = data[len - 2] == 0; // check if 2nd to last byte is 0x0.

@@ -41,7 +41,7 @@ public enum FortniteWeaponTypes {
     /**
      * Checks if a weapon type matches the knock weapon types.
      * Apparently the weapons have different ids for the DBNO (down but not out) state.
-     *
+     * <p>
      * If <code>true</code> is returned, the player was fully eliminated from the game.
      * If <code>false</code> is returned, the player was knocked out from the game.
      *

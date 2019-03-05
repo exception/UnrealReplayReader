@@ -10,17 +10,6 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class ByteUtils {
-
-    // Taken from https://stackoverflow.com/a/29132118
-    public static long bytesToLong(byte[] b) {
-        long result = 0;
-        for (int i = 0; i < 8; i++) {
-            result <<= 8;
-            result |= (b[i] & 0xFF);
-        }
-        return result;
-    }
-
     public static int adjustLength(int length) {
         return length < 0 ? -length * 2 : length;
     }
