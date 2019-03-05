@@ -22,7 +22,7 @@ public enum FortniteWeaponTypes {
     CROSS_BOW(15, 271, "Crossbow"),
     SWITCH_TEAMS(37, 293, "Switch Teams"),
     FALL_DAMAGE(1, 257, "Fall Damage"),
-    RESPAWN(39, -2, "Respawn"),
+    RESPAWN(46, -2, "Respawn"),
     TRAP(16, 272, "Trap"),
     PICKAXE(8, 264, "Pickaxe"),
     VEHICLE(23, 279, "Vehicle"),
@@ -30,6 +30,7 @@ public enum FortniteWeaponTypes {
     TURRET(27, 283, "Turret"),
     STINK_NADE(25, 281, "Stink Grenade"),
     GRENADE(10, 266, "Grenade"),
+    KICKED(31, 31, "Kicked from Party"),
     UNKNOWN(0, -2, "Unknown");
 
     private long id;

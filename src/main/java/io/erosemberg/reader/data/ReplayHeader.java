@@ -3,7 +3,7 @@ package io.erosemberg.reader.data;
 import io.erosemberg.reader.util.TimeUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import me.hugmanrique.jacobin.reader.ByteStreamReader;
+import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,7 +33,7 @@ public class ReplayHeader {
     private Date timeStamp;
     private boolean compressed;
 
-    static ReplayHeader readHeader(ByteStreamReader reader) throws IOException {
+    static ReplayHeader readHeader(LittleEndianDataReader reader) throws IOException {
         long magicNumber = reader.readUInt32();
         long fileVersion = reader.readUInt32();
         int lengthInMs = reader.readInt32();

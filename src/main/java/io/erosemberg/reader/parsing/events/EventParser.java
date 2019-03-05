@@ -3,7 +3,7 @@ package io.erosemberg.reader.parsing.events;
 import io.erosemberg.reader.data.Event;
 import io.erosemberg.reader.gamedata.GameData;
 import io.erosemberg.reader.parsing.ParserOptions;
-import me.hugmanrique.jacobin.reader.ByteStreamReader;
+import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ public interface EventParser<T extends GameData> {
 
     /**
      * Returns an instance of {@link T} with data gathered from the {@link Event}
-     * and the {@link ByteStreamReader}.
+     * and the {@link LittleEndianDataReader}.
      *
      * @param event  the event to parse, must be non-null.
      * @param reader the stream of the replay we're reading
@@ -24,7 +24,7 @@ public interface EventParser<T extends GameData> {
      *               and may affect it's performance.
      * @throws IOException if an I/O error occurs.
      */
-    T parse(Event event, ByteStreamReader reader, ParserOptions options) throws IOException;
+    T parse(Event event, LittleEndianDataReader reader, ParserOptions options) throws IOException;
 
     /**
      * Once we're done parsing, this will return the finalized GameData object.

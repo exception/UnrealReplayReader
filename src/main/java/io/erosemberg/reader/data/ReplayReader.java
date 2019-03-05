@@ -3,7 +3,7 @@ package io.erosemberg.reader.data;
 import io.erosemberg.reader.gamedata.GameData;
 import io.erosemberg.reader.parsing.ParserOptions;
 import io.erosemberg.reader.parsing.events.EventParser;
-import me.hugmanrique.jacobin.reader.ByteStreamReader;
+import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -19,20 +19,20 @@ public class ReplayReader<T extends GameData> {
     private final int INDEX_NONE = -1;
     private final EventParser<T> parser;
     private final ParserOptions options;
-    private final ByteStreamReader reader;
+    private final LittleEndianDataReader reader;
 
     /**
      * Creates a new instance of the ReplayReader.
      *
      * @param reader the ByteStreamReader from which we will be reading the data.
      */
-    public ReplayReader(ByteStreamReader reader, EventParser<T> parser, ParserOptions options) {
+    public ReplayReader(LittleEndianDataReader reader, EventParser<T> parser, ParserOptions options) {
         this.reader = reader;
         this.parser = parser;
         this.options = options;
     }
 
-    public ReplayReader(ByteStreamReader reader, EventParser<T> parser) {
+    public ReplayReader(LittleEndianDataReader reader, EventParser<T> parser) {
         this(reader, parser, ParserOptions.builder().debug(true).printUnknownWeapons(true).build());
     }
 

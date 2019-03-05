@@ -5,12 +5,10 @@ import io.erosemberg.reader.data.ReplayReader;
 import io.erosemberg.reader.gamedata.fortnite.FortniteGameData;
 import io.erosemberg.reader.parsing.ParserOptions;
 import io.erosemberg.reader.parsing.StandardParsers;
-import me.hugmanrique.jacobin.reader.ByteStreamReader;
-import me.hugmanrique.jacobin.reader.ByteStreamReaderBuilder;
+import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteOrder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -29,10 +27,7 @@ public class Main {
         // This is just for testing purposes.
         Path path = Paths.get(replayPath);
         FileInputStream stream = new FileInputStream(path.toFile());
-        ByteStreamReader reader = new ByteStreamReaderBuilder()
-                .stream(stream)
-                .order(ByteOrder.LITTLE_ENDIAN)
-                .build();
+        LittleEndianDataReader reader = new LittleEndianDataReader(stream);
 
         ReplayReader<FortniteGameData> replayReader = new ReplayReader<>(reader, StandardParsers.FORTNITE_PARSER, ParserOptions.builder().printUnknownWeapons(true).build());
         ReplayInfo<FortniteGameData> info = replayReader.read();

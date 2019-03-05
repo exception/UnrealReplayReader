@@ -65,7 +65,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.hugmanrique</groupId>
+            <groupId>com.github.Hugmanrique</groupId>
             <artifactId>Jacobin</artifactId>
             <version>master-SNAPSHOT</version>
         </dependency>

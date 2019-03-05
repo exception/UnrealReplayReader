@@ -6,7 +6,7 @@ import io.erosemberg.reader.gamedata.fortnite.FortniteWeaponTypes;
 import io.erosemberg.reader.parsing.ParserOptions;
 import io.erosemberg.reader.util.ByteUtils;
 import io.erosemberg.reader.util.TimeUtils;
-import me.hugmanrique.jacobin.reader.ByteStreamReader;
+import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,7 +21,7 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
     private FortniteGameData gameData = new FortniteGameData();
 
     @Override
-    public FortniteGameData parse(Event event, ByteStreamReader reader, ParserOptions options) throws IOException {
+    public FortniteGameData parse(Event event, LittleEndianDataReader reader, ParserOptions options) throws IOException {
         String group = event.getGroup();
         String metatag = event.getMetadata();
         if (group.equalsIgnoreCase("playerElim")) {
