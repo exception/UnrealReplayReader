@@ -30,7 +30,7 @@ public enum FortniteWeaponTypes {
     TURRET(27, 283, "Turret"),
     STINK_NADE(25, 281, "Stink Grenade"),
     GRENADE(10, 266, "Grenade"),
-    KICKED(31, 31, "Kicked from Party"),
+    KICKED(31, -2, "Kicked from Party"),
     UNKNOWN(0, -2, "Unknown");
 
     private long id;
