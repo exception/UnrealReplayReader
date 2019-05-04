@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 public class ByteUtils {
 
     public static byte[] decompress(byte[] buffer, int size, int uncompressedSize) {
-
         OodleLib oodle = Native.load("oo2core_3_win64.dll", OodleLib.class);
         System.out.println("oodle = " + oodle);
         byte[] decompressedBuffer = new byte[uncompressedSize];
