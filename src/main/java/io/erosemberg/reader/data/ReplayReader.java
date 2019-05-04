@@ -3,9 +3,11 @@ package io.erosemberg.reader.data;
 import io.erosemberg.reader.gamedata.GameData;
 import io.erosemberg.reader.parsing.ParserOptions;
 import io.erosemberg.reader.parsing.events.EventParser;
+import io.erosemberg.reader.util.ByteUtils;
 import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -60,7 +62,7 @@ public class ReplayReader<T extends GameData> {
 
         System.out.println("Beginning to read all the chunks! (" + reader.available() + ").");
         while (reader.available() > 0) {
-            // ttps://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L243
+            // https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Source/Runtime/NetworkReplayStreaming/LocalFileNetworkReplayStreaming/Private/LocalFileNetworkReplayStreaming.cpp#L243
             long typeOffset = reader.getOffset(); // Same as FArchive.Tell()
 
             // Parses ELocalFileChunkType from reader.
@@ -99,6 +101,10 @@ public class ReplayReader<T extends GameData> {
                     Event checkpoint = new Event(checkpointIndex, id, group, metadata, time1, time2, size, eventDataOffset);
                     checkpoints.add(checkpoint);
                     checkpointIndex += 1;
+
+                    byte[] buffer = new byte[size];
+                    reader.read(buffer);
+
                     break;
                 }
                 case REPLAY_DATA: {

@@ -52,6 +52,8 @@ public class ReplayHeader {
 
         boolean compressed = reader.readUInt32() != 0;
 
+        System.out.println("compressed = " + compressed);
+
         return new ReplayHeader(
                 magicNumber,
                 fileVersion,

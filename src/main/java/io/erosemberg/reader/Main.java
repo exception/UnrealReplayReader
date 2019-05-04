@@ -5,13 +5,16 @@ import io.erosemberg.reader.data.ReplayReader;
 import io.erosemberg.reader.gamedata.fortnite.FortniteGameData;
 import io.erosemberg.reader.parsing.ParserOptions;
 import io.erosemberg.reader.parsing.StandardParsers;
+import io.erosemberg.reader.util.ByteUtils;
 import me.hugmanrique.jacobin.reader.LittleEndianDataReader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Erik Rosemberg
@@ -47,6 +50,12 @@ public class Main {
         System.out.println("    Found " + gameData.getKills().size() + " kills.");
         System.out.println("    Found " + gameData.getPlayers().size() + " players.");
         System.out.println(gameData.toString());
+
+        System.setProperty("jna.library.path", System.getProperty("user.dir"));
+
+        byte[] array = new byte[51];
+        ByteUtils.decompress(array, 30, 50); // testing
+        System.out.println("array = " + Arrays.toString(array));
     }
 
 }

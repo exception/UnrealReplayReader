@@ -24,6 +24,7 @@ public class FortniteEventParser implements EventParser<FortniteGameData> {
     public FortniteGameData parse(Event event, LittleEndianDataReader reader, ParserOptions options) throws IOException {
         String group = event.getGroup();
         String metatag = event.getMetadata();
+        System.out.println("Meta " + metatag + " | Group " + group);
         if (group.equalsIgnoreCase("playerElim")) {
             reader.skip(45); // woo magic numbers!
             int killedLength = ByteUtils.adjustLength(reader.readInt32());
